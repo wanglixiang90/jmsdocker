@@ -1,15 +1,15 @@
 # jmsdocker
 
-# build jumpserver docker images
+## build jumpserver docker images
 1. git clone jmsdocker <br>
-	```git clone https://github.com/wanglixiang90/jmsdocker.git ```
-  <br>
+	```
+	git clone https://github.com/wanglixiang90/jmsdocker.git 
+	```
 2. build base python3.6 images <br>
 	```
 	cd  base-py36/
 	docker build -t jms/centos7-py36:latest .
 	```
-
 3. build jumpserver v1.4.8 <br>
 ```
 	cd  ../jumpserver-build/
@@ -33,7 +33,7 @@
 	docker pull bitnami/redis 
 	docker tag bitnami/redis jms/redis
 ```
-# run jumpserver by docker <br>
+## run jumpserver by docker <br>
 1. start mysql redis <br>
 ```
 	./start-jms-redis.sh
@@ -55,7 +55,7 @@
 	cd ../nginx-run
 	./start-jms-nginx-web.sh
 ```
-# visit jumpserver site
+## visit jumpserver site
  http://nginx_ip/
 
 This jumpserver not support windows RDP,  <br>
