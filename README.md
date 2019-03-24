@@ -7,17 +7,17 @@ git clone https://github.com/wanglixiang90/jmsdocker.git
 ```
 2. build base python3.6 images <br>
 ```
-cd  base-py36/
+cd base-py36/
 docker build -t jms/centos7-py36:latest .
 ```
 3. build jumpserver v1.4.8 <br>
 ```
-cd  ../jumpserver-build/
+cd ../jumpserver-build/
 docker build -t jms/jumpserver .
 ```
 4. build coco v1.4.8 <br>
 ```
-cd  ../coco-build/
+cd ../coco-build/
 docker build -t jms/coco .
 ```
 5. build nginx with luna/static <br>
@@ -29,7 +29,7 @@ docker build -t jms/nginx_web .
 ```
 cd ../mysql57
 docker build -t jms/mysql57-utf8 .
-cd  ../redis
+cd ../redis
 docker pull bitnami/redis 
 docker tag bitnami/redis jms/redis
 ```
