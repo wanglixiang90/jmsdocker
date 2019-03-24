@@ -1,0 +1,23 @@
+stream {
+	log_format proxy '$remote_addr [$time_local] '
+		'$protocol $status $bytes_sent $bytes_received '
+		'$session_time "$upstream_addr" '
+		'"$upstream_bytes_sent" "$upstream_bytes_received" "$upstream_connect_time"';
+
+	access_log /var/log/nginx/tcp-access.log proxy;
+	open_log_file_cache off;
+
+	upstream cocossh {
+		server jmscoco:3222 weight=50 ;
+		# server coco_ip:3223 weight=50; # 多节点
+		# 这里是 coco ssh 的后端ip
+		hash $remote_addr;
+	}
+
+	server {
+		listen 2222;
+		proxy_pass cocossh;
+		proxy_connect_timeout 10s;
+		proxy_timeout 24h; #代理超时
+	}
+}
