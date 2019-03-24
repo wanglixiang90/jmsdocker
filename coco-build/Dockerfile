@@ -1,4 +1,4 @@
-FROM jlnet/centos7-py36:latest
+FROM jms/centos7-py36:latest
 MAINTAINER Wanglx <15201376500@163.com>
 
 WORKDIR /opt/coco
