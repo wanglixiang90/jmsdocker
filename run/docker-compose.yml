@@ -1,0 +1,99 @@
+
+version: '3'
+networks:
+  jumps-net:
+    driver: bridge
+services:
+ mysql:
+    image: mysql:latest
+    restart: always
+    container_name: jms_mysql57
+    environment:
+		MYSQL_ROOT_PASSWORD:
+		MYSQL_ROOT_HOST:
+		MYSQL_USER:
+		MYSQL_PASSWORD:
+		MYSQL_DATABASE:
+    volumes:
+		- "./mysql/db:/var/lib/mysql"
+		- "./mysql/conf/my.cnf:/etc/my.cnf"
+    networks:
+     - jumps-net
+
+ redis:
+    image: bitnami/redis:latest
+    restart: always
+    container_name: jms_redis4
+    environment:
+		REDIS_PASSWORD:
+    volumes:
+		- ./redis/data:/bitnami/redis/data
+    networks:
+     - jumps-net
+
+ jumps:
+    image:jms/jumpserver
+    restart: always
+    container_name: jms_jumpserver
+    environment:
+		SECRET_KEY:
+		BOOTSTRAP_TOKEN:
+		DB_HOST=jms_mysql
+		DB_PORT=3306 
+		DB_USER=root 
+		DB_PASSWORD
+		DB_NAME=jumpserver 
+		REDIS_HOST=jms_redis
+		REDIS_PORT=6379 
+		REDIS_PASSWORD
+    volumes:
+		- ./jumps/data:/opt/jumpserver/data
+		- ./jumps/logs:/opt/jumpserver/logs
+    links:
+		- jms_mysql57:jms_mysql
+		- jms_redis4:jms_redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+     - jumps-net
+
+ coco1:
+    image:jms/coco
+    restart: always
+    container_name: jms_coco1
+    environment:
+		SECRET_KEY:
+		BOOTSTRAP_TOKEN:
+    volumes:
+		- ./coco/data:/opt/coco/data
+		- ./coco/logs:/opt/coco/logs
+    links:
+		- jms_jumpserver:jumpserver
+    depends_on:
+		- jumps
+    networks:
+     - jumps-net
+
+ nginx:
+    image: jms/nginx_web
+    restart: always
+    container_name: jms_nginx
+    volumes:
+		- ./nginx/logs:/var/log/nginx
+		- ./jumps/data:/opt/jumpserver/data
+    links:
+		- jms_jumpserver:jmsjumps
+		- jms_coco1:jmscoco
+		- jms_jumpserver:jmsguac
+    depends_on:
+      - jumps
+      - coco1
+    networks:
+      - jumps-net
+    ports:
+      - 3306:3306
+      - 6379:6379
+      - 80:80
+      - 22:22
+
