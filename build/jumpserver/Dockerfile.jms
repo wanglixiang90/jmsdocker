@@ -4,6 +4,8 @@ MAINTAINER Wanglx <15201376500@163.com>
 WORKDIR /opt/jumpserver
 RUN useradd jumpserver
 
+ENV LANG=zh_CN.UTF-8
+
 COPY . /opt/jumpserver
 
 RUN yum -y install openldap-clients telnet && \
@@ -16,9 +18,6 @@ RUN yum -y install openldap-clients telnet && \
 VOLUME /opt/jumpserver/data
 VOLUME /opt/jumpserver/logs
 VOLUME /opt/static
-
-ENV LANG=zh_CN.UTF-8
-ENV LC_ALL=zh_CN.UTF-8
 
 EXPOSE 8080
 ENTRYPOINT ["./entrypoint.sh"]
